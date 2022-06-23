@@ -1,0 +1,82 @@
+[
+  {
+    "groupId": "3d98d725-cee2-417f-b038-2e5108923fed",
+    "name": "administrators",
+    "html": "administrators"
+  },
+  {
+    "groupId": "4d0544e6-9be0-48f0-a140-fb5c0d0dc897",
+    "name": "App Support",
+    "html": "App Support"
+  },
+  {
+    "groupId": "139d72c0-bfb4-4ea8-b722-b8c60e6102ac",
+    "name": "atlassian-addons-admin",
+    "html": "atlassian-addons-admin"
+  },
+  {
+    "groupId": "64337124-e941-409c-9dec-ed443ecb8d44",
+    "name": "confluence-admins-igsl-cms-uat",
+    "html": "confluence-admins-igsl-cms-uat"
+  },
+  {
+    "groupId": "2e4dcb26-b146-4cd0-b292-2e7feca7a10d",
+    "name": "confluence-users-igsl-cms-uat",
+    "html": "confluence-users-igsl-cms-uat"
+  },
+  {
+    "groupId": "dde8d137-0fb3-4f71-addc-5c101c40a91a",
+    "name": "Development",
+    "html": "Development"
+  },
+  {
+    "groupId": "a467fb7d-204a-429c-9698-5d9a96eff5c3",
+    "name": "infra-team",
+    "html": "infra-team"
+  },
+  {
+    "groupId": "cdf52e3a-8bd6-4aa9-82be-150c5aaa7bee",
+    "name": "jira-administrators",
+    "html": "jira-administrators"
+  },
+  {
+    "groupId": "fa5f2e94-1dd0-4df6-9eb9-23bd72ab6419",
+    "name": "jira-admins-igsl-cms-uat",
+    "html": "jira-admins-igsl-cms-uat"
+  },
+  {
+    "groupId": "10dd0382-9e22-4a10-8d4c-861d363d5311",
+    "name": "jira-servicemanagement-users-igsl-cms-uat",
+    "html": "jira-servicemanagement-users-igsl-cms-uat"
+  },
+  {
+    "groupId": "679803fd-81dd-4db5-a5e5-9693cf4187cd",
+    "name": "jira-software-users",
+    "html": "jira-software-users"
+  },
+  {
+    "groupId": "36ebedb6-50ce-4ebf-a36a-e38b8f6ef640",
+    "name": "jira-software-users-igsl-cms-uat",
+    "html": "jira-software-users-igsl-cms-uat"
+  },
+  {
+    "groupId": "b6a62dcc-4b93-4ad8-8506-78db8bde6a5d",
+    "name": "Project manager",
+    "html": "Project manager"
+  },
+  {
+    "groupId": "c532530f-9b0a-4658-a0ae-41e3786b511f",
+    "name": "site-admins",
+    "html": "site-admins"
+  },
+  {
+    "groupId": "42c089d1-ae69-497d-9868-a6959873f525",
+    "name": "system-administrators",
+    "html": "system-administrators"
+  },
+  {
+    "groupId": "6c66124a-c9f9-42c0-ba90-b2e4be9a4272",
+    "name": "User",
+    "html": "User"
+  }
+]

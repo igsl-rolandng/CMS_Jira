@@ -1,0 +1,266 @@
+[
+  {
+    "id": 10012,
+    "name": "APP1.0-UAT-Testing-Issue",
+    "key": "APPUAT",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10015,
+    "name": "Application Support",
+    "key": "AS",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10023,
+    "name": "BAU_PT_Task",
+    "key": "BAPT",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10019,
+    "name": "BAU_DEV_FINTECH",
+    "key": "BAUDEV",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10014,
+    "name": "BAU_BO",
+    "key": "BO",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10026,
+    "name": "CIS - Customer Information System",
+    "key": "CIS2",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10024,
+    "name": "Cross-Team Management",
+    "key": "CTM",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10025,
+    "name": "DEV Corporate Website",
+    "key": "DCW",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10027,
+    "name": "DEV Devops",
+    "key": "DD",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10020,
+    "name": "BAU_DEV_MIS",
+    "key": "DEVMIS",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10029,
+    "name": "DEVOPS",
+    "key": "DEVOPS",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10030,
+    "name": "Dingtalk",
+    "key": "DIN",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10028,
+    "name": "DEV_FINTECH - Market Data",
+    "key": "DMD",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10056,
+    "name": "Dummy",
+    "key": "DUM",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10032,
+    "name": "EDDA",
+    "key": "EDDA",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10033,
+    "name": "eFundCRPQ",
+    "key": "EFCRPQ",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10031,
+    "name": "E-Suitability",
+    "key": "ES",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10034,
+    "name": "Fund In-Out",
+    "key": "FIO",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10022,
+    "name": "BAU_FO Retail",
+    "key": "FO",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10021,
+    "name": "BAU_FO Institutional",
+    "key": "FOINS",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10035,
+    "name": "iAsia BSS Enhancements",
+    "key": "IBE",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10016,
+    "name": "BAU_BO iBoss Equities",
+    "key": "IBOSS",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10037,
+    "name": "iBOSS2 Enhancements",
+    "key": "IE",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10038,
+    "name": "Infrastructure Projects (基础建设项目)",
+    "key": "IP",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10039,
+    "name": "IPO",
+    "key": "IPO",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10036,
+    "name": "iBoss Revamp",
+    "key": "IR",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10041,
+    "name": "IT Security Projects (信息技术安全)",
+    "key": "ISP",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10042,
+    "name": "IT_PM_FO",
+    "key": "ITPMFO",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10043,
+    "name": "IWP - Integrated Web Portal",
+    "key": "IWP",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10018,
+    "name": "BAU_BO Lynx",
+    "key": "LYNX",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10044,
+    "name": "Online Account Opening",
+    "key": "OAO",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10045,
+    "name": "OPS",
+    "key": "OPS",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10047,
+    "name": "OTC Swap",
+    "key": "OS",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10046,
+    "name": "Production Incidents (生产系统事故)",
+    "key": "PI",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10050,
+    "name": "PT_Project",
+    "key": "PJPT",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10048,
+    "name": "Project Management Office (项目总管)",
+    "key": "PMO",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10049,
+    "name": "Proprietary Trading Projects",
+    "key": "PTP",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10040,
+    "name": "IT QA Projects (软件测试项目)",
+    "key": "QA",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10051,
+    "name": "Risk Private Fund Monitoring",
+    "key": "RPFM",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10053,
+    "name": "System Change Request",
+    "key": "SCR",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10017,
+    "name": "BAU_BO iBoss Stock Option",
+    "key": "STKOPT",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10054,
+    "name": "Trade APP",
+    "key": "TA",
+    "projectTypeKey": "software"
+  },
+  {
+    "id": 10052,
+    "name": "Test Management",
+    "key": "TCM",
+    "projectTypeKey": "business"
+  },
+  {
+    "id": 10013,
+    "name": "AAStock App Login Module",
+    "key": "TWOFA",
+    "projectTypeKey": "software"
+  }
+]

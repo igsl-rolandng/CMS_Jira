@@ -1,0 +1,17 @@
+{
+  "migrated": {
+    "10051": "10200",
+    "10050": "10100",
+    "10053": "10401",
+    "10052": "10400",
+    "10055": "10701",
+    "10054": "10600",
+    "10057": "10900",
+    "10056": "10702"
+  },
+  "failed": {
+    "10700": "{\"errorMessages\":[\"Dashboards and filters in this Jira instance cannot be shared with the public anymore. If you want to modify this item, you must change the Shares so that it is not shared with the public.\"],\"errors\":{}}",
+    "10703": "{\"errorMessages\":[\"Dashboards and filters in this Jira instance cannot be shared with the public anymore. If you want to modify this item, you must change the Shares so that it is not shared with the public.\"],\"errors\":{}}",
+    "10300": "{\"errorMessages\":[\"Dashboards and filters in this Jira instance cannot be shared with the public anymore. If you want to modify this item, you must change the Shares so that it is not shared with the public.\"],\"errors\":{}}"
+  }
+}

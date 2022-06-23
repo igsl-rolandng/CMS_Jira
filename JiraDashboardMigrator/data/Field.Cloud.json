@@ -1,0 +1,702 @@
+[
+  {
+    "id": "customfield_10070",
+    "name": "0 Resources for Development",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10071",
+    "name": "0 PT Description",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10072",
+    "name": "Completed by Service Provider",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10073",
+    "name": "Service Provider Name",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+    }
+  },
+  {
+    "id": "customfield_10074",
+    "name": "Test Result",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10075",
+    "name": "Rollout and Rollback Plan",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10076",
+    "name": "To Backup ENV",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+    }
+  },
+  {
+    "id": "customfield_10077",
+    "name": "To DR ENV",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+    }
+  },
+  {
+    "id": "customfield_10060",
+    "name": "Current Status",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10061",
+    "name": "0 Resources for QA",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+    }
+  },
+  {
+    "id": "customfield_10062",
+    "name": "0 Start Date",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+    }
+  },
+  {
+    "id": "customfield_10063",
+    "name": "0 Traget End Day",
+    "custom": true,
+    "schema": {
+      "type": "option-with-child",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:cascadingselect"
+    }
+  },
+  {
+    "id": "customfield_10064",
+    "name": "0 Remark and Comments",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10065",
+    "name": "0 PT Priority List",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10066",
+    "name": "0 Difficulties",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10067",
+    "name": "0 Team Involved",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10068",
+    "name": "0 Related Systems",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10069",
+    "name": "0 Status Update",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10050",
+    "name": "Opex",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+    }
+  },
+  {
+    "id": "customfield_10051",
+    "name": "Start Date (migrated)",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+    }
+  },
+  {
+    "id": "customfield_10052",
+    "name": "End Date",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+    }
+  },
+  {
+    "id": "customfield_10053",
+    "name": "Application (Ken)",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10054",
+    "name": "Version",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+    }
+  },
+  {
+    "id": "customfield_10055",
+    "name": "Task Type",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10056",
+    "name": "Story Points (migrated)",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+    }
+  },
+  {
+    "id": "customfield_10057",
+    "name": "Component",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10058",
+    "name": "Epic/Theme",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:labels"
+    }
+  },
+  {
+    "id": "customfield_10059",
+    "name": "Requester (migrated)",
+    "custom": true,
+    "schema": {
+      "type": "user",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker"
+    }
+  },
+  {
+    "id": "customfield_10049",
+    "name": "FO System",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10040",
+    "name": "Story Points",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+    }
+  },
+  {
+    "id": "customfield_10041",
+    "name": "Requester",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textfield"
+    }
+  },
+  {
+    "id": "customfield_10042",
+    "name": "Requester Department",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10043",
+    "name": "System",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multiselect"
+    }
+  },
+  {
+    "id": "customfield_10044",
+    "name": "Narrative Solution",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10045",
+    "name": "Handled by PM (Name)",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:textarea"
+    }
+  },
+  {
+    "id": "customfield_10046",
+    "name": "Man Days",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+    }
+  },
+  {
+    "id": "customfield_10047",
+    "name": "Capex",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:float"
+    }
+  },
+  {
+    "id": "customfield_10048",
+    "name": "Application",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10038",
+    "name": "Issue/Action Date",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+    }
+  },
+  {
+    "id": "customfield_10039",
+    "name": "Ops Risk Reported",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:radiobuttons"
+    }
+  },
+  {
+    "id": "customfield_10030",
+    "name": "Approvals",
+    "custom": true,
+    "schema": {
+      "type": "sd-approvals",
+      "custom": "com.atlassian.servicedesk.approvals-plugin:sd-approvals"
+    }
+  },
+  {
+    "id": "customfield_10033",
+    "name": "Approver groups",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "group",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multigrouppicker"
+    }
+  },
+  {
+    "id": "customfield_10034",
+    "name": "Affected services",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "service-entity-field",
+      "custom": "com.atlassian.jira.plugins.service-entity:service-entity-field-cftype"
+    }
+  },
+  {
+    "id": "customfield_10035",
+    "name": "Time to resolution",
+    "custom": true,
+    "schema": {
+      "type": "sd-servicelevelagreement",
+      "custom": "com.atlassian.servicedesk:sd-sla-field"
+    }
+  },
+  {
+    "id": "customfield_10036",
+    "name": "Time to first response",
+    "custom": true,
+    "schema": {
+      "type": "sd-servicelevelagreement",
+      "custom": "com.atlassian.servicedesk:sd-sla-field"
+    }
+  },
+  {
+    "id": "customfield_10037",
+    "name": "Request language",
+    "custom": true,
+    "schema": {
+      "type": "sd-request-lang",
+      "custom": "com.atlassian.servicedesk.servicedesk-lingo-integration-plugin:sd-request-language"
+    }
+  },
+  {
+    "id": "customfield_10027",
+    "name": "Request participants",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "user",
+      "custom": "com.atlassian.servicedesk:sd-request-participants"
+    }
+  },
+  {
+    "id": "customfield_10028",
+    "name": "Satisfaction",
+    "custom": true,
+    "schema": {
+      "type": "sd-feedback",
+      "custom": "com.atlassian.servicedesk:sd-request-feedback"
+    }
+  },
+  {
+    "id": "customfield_10029",
+    "name": "Satisfaction date",
+    "custom": true,
+    "schema": {
+      "type": "datetime",
+      "custom": "com.atlassian.servicedesk:sd-request-feedback-date"
+    }
+  },
+  {
+    "id": "customfield_10020",
+    "name": "Sprint",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "json",
+      "custom": "com.pyxis.greenhopper.jira:gh-sprint"
+    }
+  },
+  {
+    "id": "customfield_10021",
+    "name": "Flagged",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes"
+    }
+  },
+  {
+    "id": "customfield_10022",
+    "name": "Target start",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jpo:jpo-custom-field-baseline-start"
+    }
+  },
+  {
+    "id": "customfield_10023",
+    "name": "Target end",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jpo:jpo-custom-field-baseline-end"
+    }
+  },
+  {
+    "id": "customfield_10024",
+    "name": "[CHART] Date of First Response",
+    "custom": true,
+    "schema": {
+      "type": "datetime",
+      "custom": "com.atlassian.jira.ext.charting:firstresponsedate"
+    }
+  },
+  {
+    "id": "customfield_10025",
+    "name": "[CHART] Time in Status",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.atlassian.jira.ext.charting:timeinstatus"
+    }
+  },
+  {
+    "id": "customfield_10026",
+    "name": "Work category",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.atlassian.jira.plugins.work-category-field:work-category-field-cftype"
+    }
+  },
+  {
+    "id": "customfield_10016",
+    "name": "Story point estimate",
+    "custom": true,
+    "schema": {
+      "type": "number",
+      "custom": "com.pyxis.greenhopper.jira:jsw-story-points"
+    }
+  },
+  {
+    "id": "customfield_10017",
+    "name": "Issue color",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.pyxis.greenhopper.jira:jsw-issue-color"
+    }
+  },
+  {
+    "id": "customfield_10018",
+    "name": "Parent Link",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.atlassian.jpo:jpo-custom-field-parent"
+    }
+  },
+  {
+    "id": "customfield_10019",
+    "name": "Rank",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.pyxis.greenhopper.jira:gh-lexo-rank"
+    }
+  },
+  {
+    "id": "customfield_10010",
+    "name": "Request Type",
+    "custom": true,
+    "schema": {
+      "type": "sd-customerrequesttype",
+      "custom": "com.atlassian.servicedesk:vp-origin"
+    }
+  },
+  {
+    "id": "customfield_10011",
+    "name": "Epic Name",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.pyxis.greenhopper.jira:gh-epic-label"
+    }
+  },
+  {
+    "id": "customfield_10012",
+    "name": "Epic Status",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.pyxis.greenhopper.jira:gh-epic-status"
+    }
+  },
+  {
+    "id": "customfield_10013",
+    "name": "Epic Color",
+    "custom": true,
+    "schema": {
+      "type": "string",
+      "custom": "com.pyxis.greenhopper.jira:gh-epic-color"
+    }
+  },
+  {
+    "id": "customfield_10014",
+    "name": "Epic Link",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.pyxis.greenhopper.jira:gh-epic-link"
+    }
+  },
+  {
+    "id": "customfield_10015",
+    "name": "Start date",
+    "custom": true,
+    "schema": {
+      "type": "date",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datepicker"
+    }
+  },
+  {
+    "id": "customfield_10005",
+    "name": "Change type",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10006",
+    "name": "Change risk",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10007",
+    "name": "Change reason",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  },
+  {
+    "id": "customfield_10008",
+    "name": "Actual start",
+    "custom": true,
+    "schema": {
+      "type": "datetime",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+    }
+  },
+  {
+    "id": "customfield_10009",
+    "name": "Actual end",
+    "custom": true,
+    "schema": {
+      "type": "datetime",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:datetime"
+    }
+  },
+  {
+    "id": "customfield_10000",
+    "name": "Development",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.atlassian.jira.plugins.jira-development-integration-plugin:devsummarycf"
+    }
+  },
+  {
+    "id": "customfield_10001",
+    "name": "Team",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.atlassian.teams:rm-teams-custom-field-team"
+    }
+  },
+  {
+    "id": "customfield_10002",
+    "name": "Organizations",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "sd-customerorganization",
+      "custom": "com.atlassian.servicedesk:sd-customer-organizations"
+    }
+  },
+  {
+    "id": "customfield_10003",
+    "name": "Approvers",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "items": "user",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker"
+    }
+  },
+  {
+    "id": "customfield_10004",
+    "name": "Impact",
+    "custom": true,
+    "schema": {
+      "type": "option",
+      "custom": "com.atlassian.jira.plugin.system.customfieldtypes:select"
+    }
+  }
+]
