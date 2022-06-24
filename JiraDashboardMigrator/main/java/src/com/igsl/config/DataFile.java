@@ -32,6 +32,9 @@ public enum DataFile {
 	private DataFile(String category, String type) {
 		value = category + "." + type + EXTENSION;
 	}
+	private DataFile(String value) {
+		this.value = value;
+	}
 	@Override
 	public String toString() {
 		return value;

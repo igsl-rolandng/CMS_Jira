@@ -1,5 +1,6 @@
 package com.igsl.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataCenterPortalPage {
@@ -13,8 +14,8 @@ public class DataCenterPortalPage {
 	private String userDisplayName;
 	private String username;
 	private String accountId;
-	private List<DataCenterPortalPermission> permissions;
-	private List<DataCenterPortletConfiguration> portlets;
+	private List<DataCenterPortalPermission> permissions = new ArrayList<DataCenterPortalPermission>();
+	private List<DataCenterPortletConfiguration> portlets = new ArrayList<DataCenterPortletConfiguration>();
 	public int getId() {
 		return id;
 	}
