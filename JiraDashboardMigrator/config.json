@@ -8,5 +8,5 @@
 	"targetRESTBaseURL": "https://[Cloud Domain]/",
 	"targetUser": "[User]",
 	"targetAPIToken": "[API Token]",
-	"enableLog": false
+	"jerseyLog": false
 }

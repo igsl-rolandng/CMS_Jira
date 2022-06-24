@@ -85,6 +85,7 @@ import com.igsl.mybatis.FilterMapper;
  */
 public class DashboardMigrator {
 	
+	private static final String NEWLINE = System.getProperty("line.separator");
 	private static Logger LOGGER; 
 	
 	static {
@@ -322,13 +323,19 @@ public class DashboardMigrator {
 	}
 
 	private static <T> T readFile(DataFile file, Class<? extends T> cls) throws IOException, JsonParseException {
-		String content = Files.readString(Paths.get(file.toString()));
-		return GSON.fromJson(content, cls);
+		StringBuilder sb = new StringBuilder();
+		for (String line : Files.readAllLines(Paths.get(file.toString()))) {
+			sb.append(line).append(NEWLINE);
+		}
+		return GSON.fromJson(sb.toString(), cls);
 	}
 	
 	private static <T> T readFile(DataFile file, GenericType<T> t) throws IOException, JsonParseException {
-		String content = Files.readString(Paths.get(file.toString()));
-		return GSON.fromJson(content, t.getType());
+		StringBuilder sb = new StringBuilder();
+		for (String line : Files.readAllLines(Paths.get(file.toString()))) {
+			sb.append(line).append(NEWLINE);
+		}
+		return GSON.fromJson(sb.toString(), t.getType());
 	}
 	
 	private static void saveFile(DataFile file, Object content) throws IOException {
