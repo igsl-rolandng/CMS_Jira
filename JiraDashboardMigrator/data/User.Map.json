@@ -1,4 +1,5 @@
 {
+  "type": "USER",
   "mapped": {
     "qponlee": "62a6aa8a6be17d006f2e4e7d",
     "marcong": "62a6aa7ecb3cb7006990022f",
@@ -88,5 +89,6 @@
       "deleted": false,
       "emailAddress": "michaelcheungcy@cmschina.com.hk"
     }
-  ]
+  ],
+  "failed": {}
 }

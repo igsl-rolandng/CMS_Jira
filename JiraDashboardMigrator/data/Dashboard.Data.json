@@ -43,7 +43,7 @@
           {
             "id": 14377,
             "userPrefKey": "filterId",
-            "userPrefValue": "filter-10001"
+            "userPrefValue": "filter-10602"
           },
           {
             "id": 14378,
@@ -142,7 +142,7 @@
           {
             "id": 14406,
             "userPrefKey": "xstattype",
-            "userPrefValue": "customfield_10606"
+            "userPrefValue": "customfield_10066"
           },
           {
             "id": 14407,
@@ -161,7 +161,7 @@
           {
             "id": 14387,
             "userPrefKey": "filterId",
-            "userPrefValue": "filter-10001"
+            "userPrefValue": "filter-10602"
           },
           {
             "id": 14388,
@@ -376,7 +376,7 @@
           {
             "id": 10464,
             "userPrefKey": "filterId",
-            "userPrefValue": "10349"
+            "userPrefValue": "10650"
           },
           {
             "id": 10465,
@@ -386,7 +386,7 @@
           {
             "id": 10466,
             "userPrefKey": "columnNames",
-            "userPrefValue": "summary|description|customfield_10300|status|customfield_10302|project|assignee|priority"
+            "userPrefValue": "summary|description|customfield_10059|status|customfield_10051|project|assignee|priority"
           },
           {
             "id": 10467,
@@ -539,7 +539,7 @@
           {
             "id": 13667,
             "userPrefKey": "filterId",
-            "userPrefValue": "10801"
+            "userPrefValue": "10639"
           },
           {
             "id": 13668,
@@ -578,7 +578,7 @@
           {
             "id": 13636,
             "userPrefKey": "filterId",
-            "userPrefValue": "11131"
+            "userPrefValue": "10642"
           },
           {
             "id": 13637,
@@ -617,7 +617,7 @@
           {
             "id": 13624,
             "userPrefKey": "filterId",
-            "userPrefValue": "11164"
+            "userPrefValue": "10676"
           },
           {
             "id": 13625,
@@ -725,7 +725,7 @@
           {
             "id": 13673,
             "userPrefKey": "filterId",
-            "userPrefValue": "11150"
+            "userPrefValue": "10668"
           },
           {
             "id": 13674,
@@ -764,7 +764,7 @@
           {
             "id": 13618,
             "userPrefKey": "filterId",
-            "userPrefValue": "10805"
+            "userPrefValue": "10640"
           },
           {
             "id": 13619,
@@ -877,7 +877,7 @@
           {
             "id": 13630,
             "userPrefKey": "filterId",
-            "userPrefValue": "11132"
+            "userPrefValue": "10664"
           },
           {
             "id": 13631,
@@ -947,7 +947,7 @@
           {
             "id": 13036,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuetype|issuekey|customfield_10309|summary|assignee"
+            "userPrefValue": "issuetype|issuekey|customfield_10043|summary|assignee"
           },
           {
             "id": 13037,
@@ -986,7 +986,7 @@
           {
             "id": 12828,
             "userPrefKey": "statType",
-            "userPrefValue": "customfield_10309"
+            "userPrefValue": "customfield_10043"
           },
           {
             "id": 12829,
@@ -1040,7 +1040,7 @@
           {
             "id": 12845,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuetype|issuekey|customfield_10309|summary|assignee"
+            "userPrefValue": "issuetype|issuekey|customfield_10043|summary|assignee"
           },
           {
             "id": 12846,
@@ -1074,7 +1074,7 @@
           {
             "id": 12836,
             "userPrefKey": "statType",
-            "userPrefValue": "customfield_10309"
+            "userPrefValue": "customfield_10043"
           },
           {
             "id": 12837,
@@ -1128,7 +1128,7 @@
           {
             "id": 12851,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuetype|issuekey|customfield_10309|summary|assignee"
+            "userPrefValue": "issuetype|issuekey|customfield_10043|summary|assignee"
           },
           {
             "id": 12852,
@@ -1167,7 +1167,7 @@
           {
             "id": 12857,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuetype|issuekey|customfield_10309|summary|assignee"
+            "userPrefValue": "issuetype|issuekey|customfield_10043|summary|assignee"
           },
           {
             "id": 12858,
@@ -1211,7 +1211,7 @@
           {
             "id": 13396,
             "userPrefKey": "filterId",
-            "userPrefValue": "11110"
+            "userPrefValue": "10659"
           },
           {
             "id": 13397,
@@ -1221,7 +1221,7 @@
           {
             "id": 13398,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuekey|issuetype|customfield_10309|summary|assignee|updated"
+            "userPrefValue": "issuekey|issuetype|customfield_10043|summary|assignee|updated"
           },
           {
             "id": 13399,
@@ -1260,7 +1260,7 @@
           {
             "id": 13430,
             "userPrefKey": "statType",
-            "userPrefValue": "customfield_10309"
+            "userPrefValue": "customfield_10043"
           },
           {
             "id": 13431,
@@ -1285,7 +1285,7 @@
           {
             "id": 13435,
             "userPrefKey": "id",
-            "userPrefValue": "11113"
+            "userPrefValue": "10643"
           },
           {
             "id": 13436,
@@ -1348,7 +1348,7 @@
           {
             "id": 13438,
             "userPrefKey": "statType",
-            "userPrefValue": "customfield_10309"
+            "userPrefValue": "customfield_10043"
           },
           {
             "id": 13439,
@@ -1373,7 +1373,7 @@
           {
             "id": 13443,
             "userPrefKey": "id",
-            "userPrefValue": "11110"
+            "userPrefValue": "10659"
           },
           {
             "id": 13444,
@@ -1432,7 +1432,7 @@
           {
             "id": 13411,
             "userPrefKey": "id",
-            "userPrefValue": "11157"
+            "userPrefValue": "10675"
           },
           {
             "id": 13412,
@@ -1491,7 +1491,7 @@
           {
             "id": 13427,
             "userPrefKey": "id",
-            "userPrefValue": "11110"
+            "userPrefValue": "10659"
           },
           {
             "id": 13428,
@@ -1550,7 +1550,7 @@
           {
             "id": 13453,
             "userPrefKey": "id",
-            "userPrefValue": "11156"
+            "userPrefValue": "10674"
           },
           {
             "id": 13454,
@@ -1661,7 +1661,7 @@
           {
             "id": 13583,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuekey|customfield_10309|summary|issuetype|description|priority|customfield_10603"
+            "userPrefValue": "issuekey|customfield_10043|summary|issuetype|description|priority|customfield_10038"
           },
           {
             "id": 13584,
@@ -1700,7 +1700,7 @@
           {
             "id": 13601,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuekey|customfield_10309|summary|issuetype|description|priority|customfield_10603|status"
+            "userPrefValue": "issuekey|customfield_10043|summary|issuetype|description|priority|customfield_10038|status"
           },
           {
             "id": 13602,
@@ -1744,7 +1744,7 @@
           {
             "id": 13608,
             "userPrefKey": "columnNames",
-            "userPrefValue": "issuetype|issuekey|summary|priority|assignee|customfield_10603"
+            "userPrefValue": "issuetype|issuekey|summary|priority|assignee|customfield_10038"
           },
           {
             "id": 13609,

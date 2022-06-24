@@ -1,4 +1,5 @@
 {
+  "type": "ROLE",
   "mapped": {
     "10002": "10002",
     "10101": "10012",
@@ -11,5 +12,6 @@
       "name": "PM role",
       "description": ""
     }
-  ]
+  ],
+  "failed": {}
 }

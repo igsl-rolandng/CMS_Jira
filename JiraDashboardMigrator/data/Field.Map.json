@@ -1,4 +1,5 @@
 {
+  "type": "CUSTOM_FIELD",
   "mapped": {
     "customfield_10010": "customfield_10047",
     "customfield_10011": "customfield_10050",
@@ -111,5 +112,6 @@
         "custom": "com.pyxis.greenhopper.jira:gh-sprint"
       }
     }
-  ]
+  ],
+  "failed": {}
 }

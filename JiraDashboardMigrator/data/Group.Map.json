@@ -1,4 +1,5 @@
 {
+  "type": "GROUP",
   "mapped": {
     "infra-team": "a467fb7d-204a-429c-9698-5d9a96eff5c3",
     "jira-administrators": "cdf52e3a-8bd6-4aa9-82be-150c5aaa7bee",
@@ -9,5 +10,6 @@
     "Development": "dde8d137-0fb3-4f71-addc-5c101c40a91a"
   },
   "conflict": {},
-  "unmapped": []
+  "unmapped": [],
+  "failed": {}
 }
