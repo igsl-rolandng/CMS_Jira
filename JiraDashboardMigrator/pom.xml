@@ -133,6 +133,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
 							<archive>
 								<manifest>
 									<mainClass>com.igsl.DashboardMigrator</mainClass>
