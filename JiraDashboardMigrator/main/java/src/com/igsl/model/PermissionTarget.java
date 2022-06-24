@@ -27,6 +27,8 @@ public class PermissionTarget {
 		case USER:
 			result.accountId = permission.getParam1();
 			break;
+		default:
+			break;
 		}
 		return result;
 	}
@@ -45,6 +47,8 @@ public class PermissionTarget {
 			break;
 		case USER:
 			result.accountId = permission.getUser().getAccountId();
+			break;
+		default:
 			break;
 		}
 		return result;

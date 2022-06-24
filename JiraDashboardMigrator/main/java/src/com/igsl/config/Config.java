@@ -11,7 +11,7 @@ public class Config {
 	private String targetUser = "[Cloud site user, e.g kc.wong@igsl-group.com]";
 	private String targetAPIToken = "[REST API token, generate one at https://id.atlassian.com/manage-profile/security/api-tokens]";
 	private Operation operation;
-	private boolean enableLog = false;
+	private boolean jerseyLog = false;
 	// Generated
 	public String getSourceUser() {
 		return sourceUser;
@@ -73,10 +73,10 @@ public class Config {
 	public void setOperation(Operation operation) {
 		this.operation = operation;
 	}
-	public boolean isEnableLog() {
-		return enableLog;
+	public boolean isJerseyLog() {
+		return jerseyLog;
 	}
-	public void setEnableLog(boolean enableLog) {
-		this.enableLog = enableLog;
+	public void setJerseyLog(boolean jerseyLog) {
+		this.jerseyLog = jerseyLog;
 	}
 }

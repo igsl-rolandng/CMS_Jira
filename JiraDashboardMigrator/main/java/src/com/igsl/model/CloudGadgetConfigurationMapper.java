@@ -15,9 +15,15 @@ public class CloudGadgetConfigurationMapper {
 	public static class ConfigData {
 		String pattern;
 		MappingType type;
-		public ConfigData(String pattern, MappingType type) {
+		String replacePrefix;
+		int targetGroup;
+		String replaceSuffix;
+		public ConfigData(String pattern, MappingType type, String replacePrefix, int targetGroup, String replaceSuffix) {
 			this.pattern = pattern;
 			this.type = type;
+			this.replacePrefix = replacePrefix;
+			this.targetGroup = targetGroup;
+			this.replaceSuffix = replaceSuffix;
 		}
 		public String getPattern() {
 			return pattern;
@@ -25,20 +31,29 @@ public class CloudGadgetConfigurationMapper {
 		public MappingType getType() {
 			return type;
 		}
+		public String getReplacePrefix() {
+			return replacePrefix;
+		}
+		public String getReplaceSuffix() {
+			return replaceSuffix;
+		}
+		public int getTargetGroup() {
+			return targetGroup;
+		}
 	}
 	
 	public enum Config {
-		FILTER_ID_WITH_PREFIX("filterId", new ConfigData("filterId-([0-9]+)", MappingType.FILTER)),
-		Y_STAT_TYPE("ystattype", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD)),
-		X_STAT_TYPE("xstattype", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD)),
-		FILTER_ID("filterId", new ConfigData("([0-9]+)", MappingType.FILTER)),
-		COLUMN_NAMES("columnNames", true, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD)),
-		SORT_BY("sortBy", false, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD)),
-		STAT_TYPE("statType", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD)),
-		PROJECT_OR_FILTER_ID_PROJECT("projectOrFilterId", new ConfigData("projectId-([0-9]+)", MappingType.PROJECT)),
-		PROJECT_OR_FILTER_ID_FILTER("projectOrFilterId", new ConfigData("filterId-([0-9]+)", MappingType.FILTER)),
-		ID_FILTER_ID("id", new ConfigData("([0-9]+)", MappingType.FILTER)),
-		SORT_COLUMN("sortColumn", false, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD));
+		FILTER_ID_WITH_PREFIX("filterId", new ConfigData("(filter-)([0-9]+)", MappingType.FILTER, "$1", 2, "")),
+		Y_STAT_TYPE("ystattype", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, "")),
+		X_STAT_TYPE("xstattype", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, "")),
+		FILTER_ID("filterId", new ConfigData("([0-9]+)", MappingType.FILTER, "", 1, "")),
+		COLUMN_NAMES("columnNames", true, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, "")),
+		SORT_BY("sortBy", false, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, "")),
+		STAT_TYPE("statType", new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, "")),
+		PROJECT_OR_FILTER_ID_PROJECT("projectOrFilterId", new ConfigData("(projectId-)([0-9]+)", MappingType.PROJECT, "$1", 2, "")),
+		PROJECT_OR_FILTER_ID_FILTER("projectOrFilterId", new ConfigData("(filterId-)([0-9]+)", MappingType.FILTER, "$1", 2, "")),
+		ID_FILTER_ID("id", new ConfigData("([0-9]+)", MappingType.FILTER, "", 1, "")),
+		SORT_COLUMN("sortColumn", false, new ConfigData("(customfield_[0-9]+)", MappingType.CUSTOM_FIELD, "", 1, ""));
 		private String key;
 		private List<ConfigData> data = new ArrayList<>();
 		private boolean fullString = true;
@@ -48,9 +63,9 @@ public class CloudGadgetConfigurationMapper {
 				this.data.addAll(Arrays.asList(data));
 			}
 		}
-		private Config(String key, boolean multiple, ConfigData... data) {
+		private Config(String key, boolean fullString, ConfigData... data) {
 			this.key = key;
-			this.fullString = multiple;
+			this.fullString = fullString;
 			if (data != null) {
 				this.data.addAll(Arrays.asList(data));
 			}
@@ -136,8 +151,6 @@ public class CloudGadgetConfigurationMapper {
 						case CUSTOM_FIELD:
 							map = field;
 							break;
-						case DASHBOARD:
-							break;
 						case FILTER:
 							map = filter;
 							break;
@@ -153,22 +166,42 @@ public class CloudGadgetConfigurationMapper {
 						case USER:
 							map = user;
 							break;
+						default:
+							break;
+						}
+						if (map == null) {
+							continue;
 						}
 						Pattern p = Pattern.compile(data.getPattern());
 						Matcher m = p.matcher(item.getUserPrefValue());
 						if (conf.isFullString()) {
-							// Multiple find and replace
-							
+							// Find all matches
+							StringBuffer newValue = new StringBuffer();
+							while (m.find()) {
+								String oldValue = m.group(data.getTargetGroup());
+								if (map.getMapped().containsKey(oldValue)) {
+									String s = map.getMapped().get(oldValue);
+									m.appendReplacement(newValue, data.getReplacePrefix() + s + data.getReplaceSuffix());
+								} else {
+									System.out.println("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
+								}
+							}
+							m.appendTail(newValue);
+							if (newValue.length() != 0) {
+								item.setUserPrefValue(newValue.toString());
+							}
 						} else {
-							// Check whole string
+							// Match whole string
 							if (m.matches()) {
 								// Replace value from map
-								String oldValue = m.group(1);
+								String oldValue = m.group(data.getTargetGroup());
 								if (map.getMapped().containsKey(oldValue)) {
-									String newValue = map.getMapped().get(oldValue);
-									item.setUserPrefValue(newValue);
+									StringBuffer newValue = new StringBuffer();
+									m.appendReplacement(newValue, data.getReplacePrefix() + map.getMapped().get(oldValue) + data.getReplaceSuffix());
+									m.appendTail(newValue);
+									item.setUserPrefValue(newValue.toString());
 								} else {
-									System.out.println("Failed to map gadget " + gadget.getId() + " configuration " + item.getUserPrefKey() + " value " + item.getUserPrefValue());
+									System.out.println("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
 								}
 							}
 						}

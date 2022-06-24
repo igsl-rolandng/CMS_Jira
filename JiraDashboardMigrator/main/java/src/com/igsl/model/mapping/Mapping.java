@@ -10,6 +10,7 @@ public class Mapping {
 	private Map<String, String> mapped = new HashMap<>();
 	private Map<String, List<String>> conflict = new HashMap<>();
 	private List<Object> unmapped = new ArrayList<>();
+	private Map<String, String> failed = new HashMap<>();
 	public Mapping() {}
 	public Mapping(MappingType type) {
 		this.type = type;
@@ -37,5 +38,11 @@ public class Mapping {
 	}
 	public void setType(MappingType type) {
 		this.type = type;
+	}
+	public Map<String, String> getFailed() {
+		return failed;
+	}
+	public void setFailed(Map<String, String> failed) {
+		this.failed = failed;
 	}
 }
