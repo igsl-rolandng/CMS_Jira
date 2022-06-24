@@ -85,7 +85,7 @@ import com.igsl.mybatis.FilterMapper;
  */
 public class DashboardMigrator {
 	
-	private static Logger LOGGER;
+	private static Logger LOGGER; 
 	
 	static {
 		// We must update system property before ever using Log4j2 Logger or LogManager
