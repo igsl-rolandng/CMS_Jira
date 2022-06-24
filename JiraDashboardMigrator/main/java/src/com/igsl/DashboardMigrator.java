@@ -366,7 +366,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				projectMapping.getUnmapped().add(src);
-				LOGGER.error("\tProject " + src.getName() + " is not mapped");
+				LOGGER.error("\tProject [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				projectMapping.getMapped().put(Integer.toString(src.getId()), targets.get(0));
@@ -374,7 +374,7 @@ public class DashboardMigrator {
 				break;
 			default:
 				projectMapping.getConflict().put(Integer.toString(src.getId()), targets);
-				LOGGER.error("\tProject " + src.getName() + " is mapped to multiple Cloud projects");
+				LOGGER.error("\tProject [" + src.getName() + "] is mapped to multiple Cloud projects");
 				break;
 			}
 		}
@@ -405,7 +405,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				userMapping.getUnmapped().add(src);
-				LOGGER.error("\tUser " + src.getName() + " is not mapped");
+				LOGGER.error("\tUser [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				userMapping.getMapped().put(src.getName(), targets.get(0));
@@ -413,7 +413,7 @@ public class DashboardMigrator {
 				break;
 			default:
 				userMapping.getConflict().put(src.getName(), targets);
-				LOGGER.error("\tUser " + src.getName() + " is mapped to multiple Cloud users");
+				LOGGER.error("\tUser [" + src.getName() + "] is mapped to multiple Cloud users");
 				break;
 			}
 		}
@@ -450,7 +450,7 @@ public class DashboardMigrator {
 				switch (targets.size()) {
 				case 0:
 					fieldMapping.getUnmapped().add(src);
-					LOGGER.error("\tCustom Field " + src.getName() + " is not mapped");
+					LOGGER.error("\tCustom Field [" + src.getName() + "] is not mapped");
 					break;
 				case 1:
 					fieldMapping.getMapped().put(src.getId(), targets.get(0));
@@ -458,7 +458,7 @@ public class DashboardMigrator {
 					break;
 				default:
 					fieldMapping.getConflict().put(src.getId(), targets);
-					LOGGER.error("\tCustom Field " + src.getName() + " is mapped to multiple Cloud fields");
+					LOGGER.error("\tCustom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
 					break;
 				}
 				break;
@@ -467,7 +467,7 @@ public class DashboardMigrator {
 				list.addAll(migratedTargets);
 				list.addAll(targets);
 				fieldMapping.getConflict().put(src.getId(), list);
-				LOGGER.error("\tCustom Field " + src.getName() + " is mapped to multiple Cloud fields");
+				LOGGER.error("\tCustom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
 				break;
 			}
 		}
@@ -493,7 +493,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				roleMapping.getUnmapped().add(src);
-				LOGGER.error("\tRole " + src.getName() + " is not mapped");
+				LOGGER.error("\tRole [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				roleMapping.getMapped().put(Integer.toString(src.getId()), targets.get(0));
@@ -501,7 +501,7 @@ public class DashboardMigrator {
 				break;
 			default:
 				roleMapping.getConflict().put(Integer.toString(src.getId()), targets);
-				LOGGER.error("\tRole " + src.getName() + " is mapped to multiple Cloud roles");
+				LOGGER.error("\tRole [" + src.getName() + "] is mapped to multiple Cloud roles");
 				break;
 			}
 		}
@@ -526,7 +526,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				groupMapping.getUnmapped().add(src);
-				LOGGER.error("\tGroup " + src.getName() + " is not mapped");
+				LOGGER.error("\tGroup [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				groupMapping.getMapped().put(src.getName(), targets.get(0));
@@ -534,7 +534,7 @@ public class DashboardMigrator {
 				break;
 			default:
 				groupMapping.getConflict().put(src.getName(), targets);
-				LOGGER.error("\tGroup " + src.getName() + " is mapped to multiple Cloud groups");
+				LOGGER.error("\tGroup [" + src.getName() + "] is mapped to multiple Cloud groups");
 				break;
 			}
 		}
@@ -573,7 +573,7 @@ public class DashboardMigrator {
 				if (userMapping.getMapped().containsKey(filter.getOwner().getName())) {
 					filter.getOwner().setAccountId(userMapping.getMapped().get(filter.getOwner().getName()));
 				} else {
-					LOGGER.error("Filter " + filter.getName() + " owner " + filter.getOwner().getName() + " cannot be mapped");
+					LOGGER.error("Filter [" + filter.getName() + "] owner [" + filter.getOwner().getName() + "] cannot be mapped");
 				}				
 				// Translate id via cloud site
 				for (DataCenterPermission permission : filter.getSharePermissions()) {
@@ -582,26 +582,26 @@ public class DashboardMigrator {
 						if (userMapping.getMapped().containsKey(permission.getUser().getId())) {
 							permission.getUser().setAccountId(userMapping.getMapped().get(permission.getUser().getName()));
 						} else {
-							LOGGER.error("Filter " + filter.getName() + " user " + permission.getUser().getName() + " (" + permission.getUser().getDisplayName() + ") cannot be mapped");
+							LOGGER.error("Filter [" + filter.getName() + "] user [" + permission.getUser().getName() + "] (" + permission.getUser().getDisplayName() + ") cannot be mapped");
 						}
 					} else if (type == PermissionType.GROUP) {
 						if (groupMapping.getMapped().containsKey(permission.getGroup().getName())) {
 							permission.getGroup().setGroupId(groupMapping.getMapped().get(permission.getGroup().getName()));
 						} else {
-							LOGGER.error("Filter " + filter.getName() + " group " + permission.getGroup().getName() + " cannot be mapped");
+							LOGGER.error("Filter [" + filter.getName() + "] group [" + permission.getGroup().getName() + "] cannot be mapped");
 						}
 					} else if (type == PermissionType.PROJECT) {
 						if (projectMapping.getMapped().containsKey(permission.getProject().getId())) {
 							permission.getProject().setId(projectMapping.getMapped().get(permission.getProject().getId()));
 						} else {
-							LOGGER.error("Filter " + filter.getName() + " project " + permission.getProject().getId() + " (" + permission.getProject().getName() + ") cannot be mapped");
+							LOGGER.error("Filter [" + filter.getName() + "] project [" + permission.getProject().getId() + "] (" + permission.getProject().getName() + ") cannot be mapped");
 						}
 						if (permission.getRole() != null) {
 							permission.setType(PermissionType.PROJECT_ROLE.toString());
 							if (roleMapping.getMapped().containsKey(permission.getRole().getId())) {
 								permission.getRole().setId(roleMapping.getMapped().get(permission.getRole().getId()));
 							} else {
-								LOGGER.error("Filter " + filter.getName() + " role " + permission.getRole().getId() + " (" + permission.getRole().getName() + ") cannot be mapped");
+								LOGGER.error("Filter [" + filter.getName() + "] role [" + permission.getRole().getId() + "] (" + permission.getRole().getName() + ") cannot be mapped");
 							}
 						}
 					}
@@ -632,14 +632,14 @@ public class DashboardMigrator {
 				Response resp2 = restCall(cloudClient, new URI(conf.getTargetRESTBaseURL()).resolve("rest/api/latest/filter/").resolve(newFilter.getId() + "/").resolve("owner"), 
 						HttpMethod.PUT, null, null, owner);
 				if (!checkStatusCode(resp2, Response.Status.NO_CONTENT)) {
-					LOGGER.error("Failed to set owner for filter " + filter.getName() + ": " + resp2.readEntity(String.class));
+					LOGGER.error("Failed to set owner for filter [" + filter.getName() + "]: " + resp2.readEntity(String.class));
 				}
 				migratedList.getMapped().put(filter.getId(), newFilter.getId());
 				migratedCount++;
 			} else {
 				String msg = resp.readEntity(String.class);
 				migratedList.getFailed().put(filter.getId(), msg);
-				LOGGER.error("Failed to create filter " + filter.getName() + ": " + msg);
+				LOGGER.error("Failed to create filter [" + filter.getName() + "]: " + msg);
 			}
 		}
 		saveFile(DataFile.FILTER_MIGRATED, migratedList);
@@ -656,7 +656,7 @@ public class DashboardMigrator {
 			if (checkStatusCode(resp, Response.Status.OK)) {
 				deletedCount++;
 			} else {
-				LOGGER.error("Failed to delete filter " + filter.getKey() + " (" + filter.getValue() + "): " + resp.readEntity(String.class));
+				LOGGER.error("Failed to delete filter [" + filter.getKey() + "] (" + filter.getValue() + "): " + resp.readEntity(String.class));
 			}
 		}
 		LOGGER.info("Filters deleted: " + deletedCount + "/" + filters.getMapped().size());
@@ -752,21 +752,21 @@ public class DashboardMigrator {
 						if (checkStatusCode(resp2, Response.Status.OK)) {
 							//System.out.println("Added config for gadget " + gadget.getGadgetXml() + " for dashboard " + dashboard.getPageName() + ": " + createdGadget.getId());
 						} else {
-							LOGGER.error("Failed to config for gadget " + gadget.getGadgetXml() + " in dashboard " + dashboard.getPageName() + ": " + resp2.readEntity(String.class));
+							LOGGER.error("Failed to config for gadget [" + gadget.getGadgetXml() + "] in dashboard [" + dashboard.getPageName() + "]: " + resp2.readEntity(String.class));
 						}
 					} else {
-						LOGGER.error("Failed to add gadget " + gadget.getGadgetXml() + " to dashboard " + dashboard.getPageName() + ": " + resp1.readEntity(String.class));
+						LOGGER.error("Failed to add gadget [" + gadget.getGadgetXml() + "] to dashboard [" + dashboard.getPageName() + "]: " + resp1.readEntity(String.class));
 					}
 				}
 				// Change owner
 				// There's no REST API to change owner?!!
-				LOGGER.warn("Please change owner of " + createdDashboard.getName() + " to " + dashboard.getUserDisplayName());
+				LOGGER.warn("Please change owner of [" + createdDashboard.getName() + "] to [" + dashboard.getUserDisplayName() + "]");
 				migratedList.getMapped().put(Integer.toString(dashboard.getId()), createdDashboard.getId());
 				migratedCount++;
 			} else {
 				String msg = resp.readEntity(String.class);
 				migratedList.getFailed().put(Integer.toString(dashboard.getId()), msg);
-				LOGGER.error("Failed to create dashboard " + dashboard.getPageName() + ": " + msg);
+				LOGGER.error("Failed to create dashboard [" + dashboard.getPageName() + "]: " + msg);
 			}
 		}
 		saveFile(DataFile.DASHBOARD_MIGRATED, migratedList);
@@ -783,7 +783,7 @@ public class DashboardMigrator {
 			if (checkStatusCode(resp, Response.Status.OK)) {
 				deletedCount++;
 			} else {
-				LOGGER.error("Failed to delete dashboard " + dashboard.getKey() + " (" + dashboard.getValue() + "): " + resp.readEntity(String.class));
+				LOGGER.error("Failed to delete dashboard [" + dashboard.getKey() + "] (" + dashboard.getValue() + "): " + resp.readEntity(String.class));
 			}
 		}
 		LOGGER.info("Dashboards deleted: " + deletedCount + "/" + dashboards.getMapped().size());
