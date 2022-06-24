@@ -314,7 +314,7 @@ public class DashboardMigrator {
 		System.out.println("java -jar JiraDashboardMigrator.jar com.igsl.DashboardMigrator <Config File> <Operation>");
 		System.out.println();
 		System.out.println("Config file content: ");
-		System.out.println(new Gson().toJson(new Config()));
+		System.out.println(GSON.toJson(new Config()));
 		System.out.println();
 		System.out.println("Operation: ");
 		for (Operation o : Operation.values()) {

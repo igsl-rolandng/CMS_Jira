@@ -121,12 +121,13 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target</outputDirectory>
+							<outputDirectory>${basedir}/output-resources</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${basedir}</directory>
 									<includes>
 										<include>config.json</include>
+										<include>README.md</include>
 									</includes>
 								</resource>
 							</resources>
@@ -157,6 +158,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>${basedir}/output-resources</outputDirectory>
 							<appendAssemblyId>false</appendAssemblyId>
 							<archive>
 								<manifest>
