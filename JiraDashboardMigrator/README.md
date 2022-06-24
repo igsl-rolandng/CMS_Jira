@@ -10,7 +10,8 @@ Pre-requisites
 
 Configuration
 1. Edit config.json and update source and target information. 
-1. Set jerseyLog to true if you want the HTTP data.
+    * For targetAPIToken, you need to generate an API token at https://id.atlassian.com/manage-profile/security/api-tokens
+1. Set jerseyLog to true if you want to log HTTP data of REST API calls.
 
 Usage
 1. Extract project/role/custom field/user/group identifier mappings:
