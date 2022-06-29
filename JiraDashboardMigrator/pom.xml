@@ -16,7 +16,89 @@
 	<description>Migrate Jira dashboards and filters from local to cloud</description>
 	<packaging>jar</packaging>
 
+	<repositories>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>atlassian-plugin-sdk</id>
+			<url>file://${env.ATLAS_HOME}/repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+	</repositories>
+
 	<dependencies>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr-runtime</artifactId>
+			<version>3.5.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.fugue</groupId>
+			<artifactId>fugue</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.javascript</groupId>
+			<artifactId>closure-compiler</artifactId>
+			<version>v20151216</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian</groupId>
+			<artifactId>atlassian-logging</artifactId>
+			<version>2.15</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.applinks</groupId>
+			<artifactId>applinks-plugin</artifactId>
+			<version>5.4.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-api</artifactId>
+			<version>7.13.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
@@ -73,10 +155,16 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.2.14</version>
 		</dependency>
+		<!-- Jira is using Log4J, so Log4J2 is out of the question
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 			<version>2.17.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -87,6 +175,14 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jul</artifactId>
 			<version>2.17.2</version>
+		</dependency>
+		-->
+		
+		<!-- Force update Xerces to a newer version. Jira dependencies included v2.4 and that is messing with MyBatis -->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.12.0</version>
 		</dependency>
 	</dependencies>
 
@@ -116,7 +212,7 @@
 				<executions>
 					<execution>
 						<id>copy-resources</id>
-						<phase>install</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
@@ -128,6 +224,42 @@
 									<includes>
 										<include>config.json</include>
 										<include>README.md</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/output-resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/lib</directory>
+									<includes>
+										<include>JiraClasses.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-libraries</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/libs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/lib</directory>
+									<includes>
+										<include>*.jar</include>
 									</includes>
 								</resource>
 							</resources>
@@ -164,6 +296,9 @@
 								<manifest>
 									<mainClass>com.igsl.DashboardMigrator</mainClass>
 								</manifest>
+								<manifestEntries>
+									<Class-Path>JiraClasses.jar</Class-Path>
+								</manifestEntries>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>

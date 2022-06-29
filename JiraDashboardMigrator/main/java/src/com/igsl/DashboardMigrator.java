@@ -12,6 +12,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
@@ -24,6 +27,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CharStream;
+import org.antlr.runtime.CommonTokenStream;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -32,13 +38,37 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.logging.LoggingFeature.Verbosity;
 import org.postgresql.Driver;
 
+import com.atlassian.jira.jql.parser.antlr.JqlLexer;
+import com.atlassian.jira.jql.parser.antlr.JqlParser;
+import com.atlassian.jira.jql.parser.antlr.JqlParser.query_return;
+import com.atlassian.logging.log4j.juli.JuliToLog4jHandler;
+import com.atlassian.query.clause.AndClause;
+import com.atlassian.query.clause.ChangedClause;
+import com.atlassian.query.clause.ChangedClauseImpl;
+import com.atlassian.query.clause.Clause;
+import com.atlassian.query.clause.NotClause;
+import com.atlassian.query.clause.OrClause;
+import com.atlassian.query.clause.TerminalClause;
+import com.atlassian.query.clause.TerminalClauseImpl;
+import com.atlassian.query.clause.WasClause;
+import com.atlassian.query.clause.WasClauseImpl;
+import com.atlassian.query.operand.EmptyOperand;
+import com.atlassian.query.operand.FunctionOperand;
+import com.atlassian.query.operand.MultiValueOperand;
+import com.atlassian.query.operand.Operand;
+import com.atlassian.query.operand.SingleValueOperand;
+import com.atlassian.query.operator.Operator;
+import com.atlassian.query.order.OrderBy;
+import com.atlassian.query.order.OrderByImpl;
+import com.atlassian.query.order.SearchSort;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -86,13 +116,7 @@ import com.igsl.mybatis.FilterMapper;
 public class DashboardMigrator {
 	
 	private static final String NEWLINE = System.getProperty("line.separator");
-	private static Logger LOGGER; 
-	
-	static {
-		// We must update system property before ever using Log4j2 Logger or LogManager
-		System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
-		LOGGER = LogManager.getLogger();
-	}
+	private static Logger LOGGER = Logger.getLogger(DashboardMigrator.class); 
 	
 	private static final JacksonJsonProvider JACKSON_JSON_PROVIDER = new JacksonJaxbJsonProvider()
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -311,14 +335,12 @@ public class DashboardMigrator {
 	}
 
 	private static void printHelp() {
-		System.out.println("java -jar JiraDashboardMigrator.jar com.igsl.DashboardMigrator <Config File> <Operation>");
-		System.out.println();
-		System.out.println("Config file content: ");
-		System.out.println(GSON.toJson(new Config()));
-		System.out.println();
-		System.out.println("Operation: ");
+		LOGGER.error("java -jar JiraDashboardMigrator.jar com.igsl.DashboardMigrator <Config File> <Operation>");
+		LOGGER.error("Config file content: ");
+		LOGGER.error(GSON.toJson(new Config()));
+		LOGGER.error("Operation: ");
 		for (Operation o : Operation.values()) {
-			System.out.println(o.toString());
+			LOGGER.error(o.toString());
 		}
 	}
 
@@ -565,6 +587,10 @@ public class DashboardMigrator {
 		Mapping projectMapping = readFile(DataFile.PROJECT_MAP, Mapping.class);
 		Mapping roleMapping = readFile(DataFile.ROLE_MAP, Mapping.class);
 		Mapping groupMapping = readFile(DataFile.GROUP_MAP, Mapping.class);
+		Mapping fieldMapping = readFile(DataFile.FIELD_MAP, Mapping.class);
+		Map<String, Mapping> maps = new HashMap<>();
+		maps.put("project", projectMapping);
+		maps.put("field", fieldMapping);
 		for (Integer id : filters) {
 			try {
 				DataCenterFilter filter = getFilter(dataCenterClient, conf.getSourceRESTBaseURL(), id);
@@ -606,7 +632,33 @@ public class DashboardMigrator {
 						}
 					}
 				}
-				filterList.add(filter);						
+				// Translate JQL
+				String jql = filter.getJql();
+				LOGGER.info("Filter [" + filter.getName() + "] JQL: [" + jql + "]");
+				JqlLexer lexer = new JqlLexer((CharStream) new ANTLRStringStream(jql));
+				CommonTokenStream cts = new CommonTokenStream(lexer);
+				JqlParser parser = new JqlParser(cts);
+				query_return qr = parser.query();
+				Clause clone = cloneClause(filter.getName(), maps, qr.clause);
+				OrderBy orderClone = null;
+				if (qr.order != null) {
+					List<SearchSort> sortList = new ArrayList<>();
+					for (SearchSort ss : qr.order.getSearchSorts()) {
+						if (fieldMapping.getMapped().containsKey(ss.getField())) {
+							String newColumn = fieldMapping.getMapped().get(ss.getField());
+							SearchSort newSS = new SearchSort(newColumn, ss.getProperty(), ss.getSortOrder());
+							sortList.add(newSS);
+							LOGGER.warn("Mapped sort column for filter [" + filter.getName() + "] column [" + ss.getField() + "] => [" + newColumn + "]");
+						} else {
+							sortList.add(ss);
+							LOGGER.warn("Unable to map sort column for filter [" + filter.getName() + "] column [" + ss.getField() + "]");
+						}
+					}
+					orderClone = new OrderByImpl(sortList);
+				}
+				LOGGER.info("Updated JQL for filter [" + filter.getName() +  "]: [" + clone + ((orderClone != null)? " " + orderClone : "") + "]");
+				filter.setJql(clone + ((orderClone != null)? " " + orderClone : ""));
+				filterList.add(filter);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -790,6 +842,128 @@ public class DashboardMigrator {
 		LOGGER.info("Delete dashboard completed");
 	}
 	
+	public static class MyTerminalClause extends TerminalClauseImpl {
+		public MyTerminalClause(String name, Operator op, Operand value) {
+			super(name, op, value);
+		}
+		@Override
+		public String toString() {
+			String s = super.toString();
+			if (s.startsWith("{") && s.endsWith("}")) {
+				return s.substring(1, s.length() - 1);
+			}
+			return s;
+		}
+	}
+	
+	private static SingleValueOperand cloneValue(SingleValueOperand src, Map<String, String> map, String filterName, String propertyName) {
+		SingleValueOperand result = null;
+		if (src != null) {
+			String key = null;
+			if (src.getLongValue() != null) {
+				key = Long.toString(src.getLongValue());
+			} else {
+				key = src.getStringValue();
+			}
+			if (map.containsKey(key)) {
+				if (src.getLongValue() != null) {
+					Long newValue = Long.valueOf(map.get(Long.toString(src.getLongValue())));
+					LOGGER.info("Mapped value for filter [" + filterName + "] type [" + propertyName + "] value [" + src.getLongValue() + "] => [" + newValue + "]");
+					result = new SingleValueOperand(newValue);
+				} else {
+					String newValue = map.get(src.getStringValue());
+					LOGGER.info("Mapped value forfilter [" + filterName + "] type [" + propertyName + "] value [" + src.getStringValue() + "] => [" + newValue + "]");
+					result = new SingleValueOperand(newValue);
+				}
+			} else {
+				if (src.getLongValue() != null) {
+					LOGGER.warn("Unable to map value for filter [" + filterName + "] type [" + propertyName + "] value [" + src.getLongValue() + "]");
+					result = new SingleValueOperand(src.getLongValue());
+				} else {
+					LOGGER.warn("Unable to map value for filter [" + filterName + "] type [" + propertyName + "] value [" + src.getStringValue() + "]");
+					result = new SingleValueOperand(src.getStringValue());
+				}
+			}
+		}
+		return result;
+	}
+	
+	private static Clause cloneClause(String filterName, Map<String, Mapping> maps, Clause c) {
+		Clause clone = null;
+		Map<String, String> propertyMap = maps.get("field").getMapped();
+		List<Clause> clonedChildren = new ArrayList<>();
+		if (c != null) {
+			// Check name
+			String propertyName = c.getName();
+			if (propertyMap.containsKey(c.getName())) {
+				propertyName = propertyMap.get(c.getName());
+				LOGGER.info("Mapped property for filter [" + filterName + "] property [" + c.getName() + "] => [" + propertyName + "]");
+			}
+			for (Clause sc : c.getClauses()) {
+				Clause clonedChild = cloneClause(filterName, maps, sc);
+				clonedChildren.add(clonedChild);
+			}
+			if (c instanceof AndClause) {
+				clone = new AndClause(clonedChildren.toArray(new Clause[0]));
+			} else if (c instanceof OrClause) {
+				clone = new OrClause(clonedChildren.toArray(new Clause[0]));
+			} else if (c instanceof NotClause) {
+				clone = new NotClause(clonedChildren.get(0));
+			} else if (c instanceof TerminalClause) {
+				TerminalClause tc = (TerminalClause) c;
+				if (maps.containsKey(tc.getName())) {
+					Map<String, String> targetMap = maps.get(tc.getName()).getMapped();
+					// Modify values
+					Operand o = tc.getOperand();
+					Operand clonedO = null;
+					if (o instanceof SingleValueOperand) {
+						SingleValueOperand svo = (SingleValueOperand) o;
+						// Change value
+						clonedO = cloneValue(svo, targetMap, filterName, tc.getName());
+					} else if (o instanceof MultiValueOperand) {
+						MultiValueOperand mvo = (MultiValueOperand) o;
+						List<Operand> list = new ArrayList<>();
+						for (Operand item : mvo.getValues()) {
+							if (item instanceof SingleValueOperand) {
+								// Change value
+								SingleValueOperand svo = (SingleValueOperand) item;
+								list.add(cloneValue(svo, targetMap, filterName, tc.getName()));
+							} else {
+								list.add(item);
+							}
+						}
+						clonedO = new MultiValueOperand(list);
+					} else if (o instanceof FunctionOperand) {
+						// TODO membersOf to map group
+						clonedO = o;
+					} else if (o instanceof EmptyOperand) {
+						clonedO = o;
+					} else {
+						LOGGER.error("Unrecognized Operand class for filter [" + filterName + "] class [" + o.getClass() + "], reusing reference");
+						clonedO = o;
+					}
+					// Use cloned operand
+					clone = new MyTerminalClause(propertyName, tc.getOperator(), clonedO);
+				} else {
+					// Use original operand
+					clone = new MyTerminalClause(propertyName, tc.getOperator(), tc.getOperand());
+				}				
+			} else if (c instanceof WasClause) {
+				WasClause wc = (WasClause) c;
+				clone = new WasClauseImpl(propertyName, wc.getOperator(), wc.getOperand(), wc.getPredicate());
+			} else if (c instanceof ChangedClause) {
+				ChangedClause cc = (ChangedClause) c;
+				clone = new ChangedClauseImpl(propertyName, cc.getOperator(), cc.getPredicate());
+			} else {
+				LOGGER.error("Unrecognized Clause class for filter [" + filterName + "] class [" + c.getClass() + "], reusing reference");
+				clone = c;
+			}
+		} else {
+			LOGGER.info("Clause: null");
+		}
+		return clone;
+	}
+
 	public static void main(String[] args) {
 		try {
 			// Parse config
@@ -807,8 +981,10 @@ public class DashboardMigrator {
 			dataCenterClient.register(HttpAuthenticationFeature.basic(conf.getSourceUser(), conf.getSourcePassword()));
 			cloudClient.register(HttpAuthenticationFeature.basic(conf.getTargetUser(), conf.getTargetAPIToken()));
 			if (conf.isJerseyLog()) {
-				java.util.logging.Logger JERSEY_LOGGER = org.apache.logging.log4j.jul.LogManager.getLogManager().getLogger(DashboardMigrator.class.getName());
-				LoggingFeature loggingFeature = new LoggingFeature(JERSEY_LOGGER, Verbosity.PAYLOAD_ANY);
+				java.util.logging.Logger JERSEY_LOGGER = java.util.logging.Logger.getLogger("rest");
+				JERSEY_LOGGER.setLevel(Level.ALL);
+				JERSEY_LOGGER.addHandler(new Log4JHandler(LOGGER));
+				LoggingFeature loggingFeature = new LoggingFeature(JERSEY_LOGGER, Verbosity.PAYLOAD_TEXT);
 				dataCenterClient.register(loggingFeature);
 				cloudClient.register(loggingFeature);
 			}
