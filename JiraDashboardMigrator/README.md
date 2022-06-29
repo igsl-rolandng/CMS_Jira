@@ -32,7 +32,11 @@ Usage
 1. Dump filter from Data Center: 
     * java -jar JiraDashboardMigrator-[version].jar config.json dumpFilter
     * Data file Filter.Data.json will be created. 
-    * You will get some errors about unable to map project ID for 3 projects mentioned above. 
+    * You will get some errors about unable to map project ID for 3 projects mentioned above. These can be ignored.
+    * You will get many warnings about unable to map values in JQL. These can be ignored.
+    * The following JQL content will be automatically translated: 
+        * Project ID
+        * Custom field name
     * If possible, manually fix the jql attribute values in the filters.
 
 1. Create filters on Cloud: 
