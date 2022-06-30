@@ -7,6 +7,7 @@ public class DataCenterFilter {
 	private String name;
 	private String description;
 	private String jql;
+	private String originalJql;
 	private PermissionTarget owner;
 	private List<DataCenterPermission> sharePermissions;
 	public String getId() {
@@ -44,5 +45,11 @@ public class DataCenterFilter {
 	}
 	public void setOwner(PermissionTarget owner) {
 		this.owner = owner;
+	}
+	public String getOriginalJql() {
+		return originalJql;
+	}
+	public void setOriginalJql(String originalJql) {
+		this.originalJql = originalJql;
 	}
 }

@@ -12,9 +12,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
@@ -39,6 +39,9 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.log4j.Logger;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.Ansi.Color;
+import org.fusesource.jansi.AnsiConsole;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -49,7 +52,6 @@ import org.postgresql.Driver;
 import com.atlassian.jira.jql.parser.antlr.JqlLexer;
 import com.atlassian.jira.jql.parser.antlr.JqlParser;
 import com.atlassian.jira.jql.parser.antlr.JqlParser.query_return;
-import com.atlassian.logging.log4j.juli.JuliToLog4jHandler;
 import com.atlassian.query.clause.AndClause;
 import com.atlassian.query.clause.ChangedClause;
 import com.atlassian.query.clause.ChangedClauseImpl;
@@ -93,6 +95,9 @@ import com.igsl.model.DataCenterPortletConfiguration;
 import com.igsl.model.PermissionTarget;
 import com.igsl.model.PermissionType;
 import com.igsl.model.mapping.CustomField;
+import com.igsl.model.mapping.Dashboard;
+import com.igsl.model.mapping.DashboardSearchResult;
+import com.igsl.model.mapping.Filter;
 import com.igsl.model.mapping.Group;
 import com.igsl.model.mapping.GroupPickerResult;
 import com.igsl.model.mapping.Mapping;
@@ -116,7 +121,7 @@ import com.igsl.mybatis.FilterMapper;
 public class DashboardMigrator {
 	
 	private static final String NEWLINE = System.getProperty("line.separator");
-	private static Logger LOGGER = Logger.getLogger(DashboardMigrator.class); 
+	private static final Logger LOGGER = Logger.getLogger(DashboardMigrator.class); 
 	
 	private static final JacksonJsonProvider JACKSON_JSON_PROVIDER = new JacksonJaxbJsonProvider()
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -335,12 +340,12 @@ public class DashboardMigrator {
 	}
 
 	private static void printHelp() {
-		LOGGER.error("java -jar JiraDashboardMigrator.jar com.igsl.DashboardMigrator <Config File> <Operation>");
-		LOGGER.error("Config file content: ");
-		LOGGER.error(GSON.toJson(new Config()));
-		LOGGER.error("Operation: ");
+		LOGGER.info("java -jar JiraDashboardMigrator.jar com.igsl.DashboardMigrator <Config File> <Operation>");
+		LOGGER.info("Config file content: ");
+		LOGGER.info(GSON.toJson(new Config()));
+		LOGGER.info("Operation: ");
 		for (Operation o : Operation.values()) {
-			LOGGER.error(o.toString());
+			LOGGER.info(o.toString());
 		}
 	}
 
@@ -364,6 +369,17 @@ public class DashboardMigrator {
 		try (FileWriter fw = new FileWriter(file.toString())) {
 			fw.write(GSON.toJson(content));
 		}
+		LOGGER.info("File " + file.toString() + " saved");
+	}
+	
+	private static void printCount(String title, int count, int total) {
+		Ansi bar = null;
+		if (count == total) {
+			bar = Ansi.ansi().bg(Color.GREEN).a("  ").reset();
+		} else {
+			bar = Ansi.ansi().bg(Color.YELLOW).a("  ").reset();
+		}
+		LOGGER.info(bar + " " + title + count + "/" + total + " " + bar);
 	}
 	
 	private static void dumpData(FilterMapper filterMapper, Client cloudClient, Client dataCenterClient, Config conf) throws Exception {
@@ -388,7 +404,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				projectMapping.getUnmapped().add(src);
-				LOGGER.error("\tProject [" + src.getName() + "] is not mapped");
+				LOGGER.error("Project [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				projectMapping.getMapped().put(Integer.toString(src.getId()), targets.get(0));
@@ -396,11 +412,11 @@ public class DashboardMigrator {
 				break;
 			default:
 				projectMapping.getConflict().put(Integer.toString(src.getId()), targets);
-				LOGGER.error("\tProject [" + src.getName() + "] is mapped to multiple Cloud projects");
+				LOGGER.error("Project [" + src.getName() + "] is mapped to multiple Cloud projects");
 				break;
 			}
 		}
-		LOGGER.info("Projects mapped: " + mappedProjectCount + "/" + serverProjects.size());
+		printCount("Projects mapped: ", mappedProjectCount, serverProjects.size());
 		saveFile(DataFile.PROJECT_MAP, projectMapping);
 		// User mapping
 		int mappedUserCount = 0;
@@ -427,7 +443,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				userMapping.getUnmapped().add(src);
-				LOGGER.error("\tUser [" + src.getName() + "] is not mapped");
+				LOGGER.error("User [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				userMapping.getMapped().put(src.getName(), targets.get(0));
@@ -435,11 +451,11 @@ public class DashboardMigrator {
 				break;
 			default:
 				userMapping.getConflict().put(src.getName(), targets);
-				LOGGER.error("\tUser [" + src.getName() + "] is mapped to multiple Cloud users");
+				LOGGER.error("User [" + src.getName() + "] is mapped to multiple Cloud users");
 				break;
 			}
 		}
-		LOGGER.info("Users mapped: " + mappedUserCount + "/" + serverUsers.size());
+		printCount("Users mapped: ", mappedUserCount, serverUsers.size());
 		saveFile(DataFile.USER_MAP, userMapping);
 		// Custom field mapping
 		int mappedFieldCount = 0;
@@ -472,7 +488,7 @@ public class DashboardMigrator {
 				switch (targets.size()) {
 				case 0:
 					fieldMapping.getUnmapped().add(src);
-					LOGGER.error("\tCustom Field [" + src.getName() + "] is not mapped");
+					LOGGER.error("Custom Field [" + src.getName() + "] is not mapped");
 					break;
 				case 1:
 					fieldMapping.getMapped().put(src.getId(), targets.get(0));
@@ -480,7 +496,7 @@ public class DashboardMigrator {
 					break;
 				default:
 					fieldMapping.getConflict().put(src.getId(), targets);
-					LOGGER.error("\tCustom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
+					LOGGER.error("Custom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
 					break;
 				}
 				break;
@@ -489,11 +505,11 @@ public class DashboardMigrator {
 				list.addAll(migratedTargets);
 				list.addAll(targets);
 				fieldMapping.getConflict().put(src.getId(), list);
-				LOGGER.error("\tCustom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
+				LOGGER.error("Custom Field [" + src.getName() + "] is mapped to multiple Cloud fields");
 				break;
 			}
 		}
-		LOGGER.info("Custom Fields mapped: " + mappedFieldCount + "/" + serverFields.size());
+		printCount("Custom Fields mapped: ", mappedFieldCount, serverFields.size());
 		saveFile(DataFile.FIELD_MAP, fieldMapping);		
 		LOGGER.info("Data dump completed");
 		// Role mapping
@@ -515,7 +531,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				roleMapping.getUnmapped().add(src);
-				LOGGER.error("\tRole [" + src.getName() + "] is not mapped");
+				LOGGER.error("Role [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				roleMapping.getMapped().put(Integer.toString(src.getId()), targets.get(0));
@@ -523,11 +539,11 @@ public class DashboardMigrator {
 				break;
 			default:
 				roleMapping.getConflict().put(Integer.toString(src.getId()), targets);
-				LOGGER.error("\tRole [" + src.getName() + "] is mapped to multiple Cloud roles");
+				LOGGER.error("Role [" + src.getName() + "] is mapped to multiple Cloud roles");
 				break;
 			}
 		}
-		LOGGER.info("Roles mapped: " + mappedRoleCount + "/" + serverRoles.size());
+		printCount("Roles mapped: ", mappedRoleCount, serverRoles.size());
 		saveFile(DataFile.ROLE_MAP, roleMapping);
 		// Group mapping
 		LOGGER.info("Processing Groups...");
@@ -548,7 +564,7 @@ public class DashboardMigrator {
 			switch (targets.size()) {
 			case 0:
 				groupMapping.getUnmapped().add(src);
-				LOGGER.error("\tGroup [" + src.getName() + "] is not mapped");
+				LOGGER.error("Group [" + src.getName() + "] is not mapped");
 				break;
 			case 1:
 				groupMapping.getMapped().put(src.getName(), targets.get(0));
@@ -556,11 +572,11 @@ public class DashboardMigrator {
 				break;
 			default:
 				groupMapping.getConflict().put(src.getName(), targets);
-				LOGGER.error("\tGroup [" + src.getName() + "] is mapped to multiple Cloud groups");
+				LOGGER.error("Group [" + src.getName() + "] is mapped to multiple Cloud groups");
 				break;
 			}
 		}
-		LOGGER.info("Groups mapped: " + mappedGroupCount + "/" + serverGroups.size());
+		printCount("Groups mapped: ", mappedGroupCount, serverGroups.size());
 		saveFile(DataFile.GROUP_MAP, groupMapping);
 		LOGGER.info("Data dump completed");
 	}
@@ -569,10 +585,58 @@ public class DashboardMigrator {
 		URI uri = new URI(baseURL).resolve("rest/api/latest/filter/").resolve(Integer.toString(id));
 		Response resp = restCall(client, uri, HttpMethod.GET, null, null, null);
 		if (checkStatusCode(resp, Response.Status.OK)) {
-			return resp.readEntity(DataCenterFilter.class);
+			DataCenterFilter filter = resp.readEntity(DataCenterFilter.class);
+			filter.setOriginalJql(filter.getJql());
+			return filter;
 		} else {
 			throw new Exception(resp.readEntity(String.class));
 		}
+	}
+	
+	private static void listFilter(FilterMapper filterMapper, Client cloudClient, Client dataCenterClient, Config conf) throws Exception {
+		LOGGER.info("List filters from Cloud...");
+		URI uri = new URI(conf.getTargetRESTBaseURL()).resolve("rest/api/latest/filter/search");
+		Map<String, String> result = new HashMap<>();
+		int startAt = 0;
+		int maxResults = 50;
+		boolean isLast = false;
+		do {
+			Map<String, Object> queryParameters = new HashMap<>();
+			queryParameters.put("startAt", startAt);
+			queryParameters.put("maxResults", maxResults);
+			Response resp = restCall(cloudClient, uri, HttpMethod.GET, null, queryParameters, null);
+			if (checkStatusCode(resp, Response.Status.OK)) {
+				SearchResult<Filter> searchResult = resp.readEntity(new GenericType<SearchResult<Filter>>() {});
+				isLast = searchResult.getIsLast();
+				for (Filter f : searchResult.getValues()) {
+					result.put(f.getId(), f.getId());
+				}
+				startAt += searchResult.getMaxResults();
+			} else {
+				throw new Exception(resp.readEntity(String.class));
+			}
+		} while (!isLast);
+		saveFile(DataFile.FILTER_LIST, result);
+		LOGGER.info("Filters found: " + result.size());
+		LOGGER.info("Filter list completed");
+	}
+	
+	private static void listDashboard(FilterMapper filterMapper, Client cloudClient, Client dataCenterClient, Config conf) throws Exception {
+		LOGGER.info("List dashboards from Cloud...");
+		URI uri = new URI(conf.getTargetRESTBaseURL()).resolve("rest/api/latest/dashboard");
+		Map<String, String> result = new HashMap<>();
+		Response resp = restCall(cloudClient, uri, HttpMethod.GET, null, null, null);
+		if (checkStatusCode(resp, Response.Status.OK)) {
+			DashboardSearchResult searchResult = resp.readEntity(DashboardSearchResult.class);
+			for (Dashboard d : searchResult.getDashboards()) {
+				result.put(d.getId(), d.getId());
+			}
+		} else {
+			throw new Exception(resp.readEntity(String.class));
+		}
+		saveFile(DataFile.DASHBOARD_LIST, result);
+		LOGGER.info("Dashboards found: " + result.size());
+		LOGGER.info("Dashboard list completed");
 	}
 	
 	private static void dumpFilter(FilterMapper filterMapper, Client cloudClient, Client dataCenterClient, Config conf) throws Exception {
@@ -591,7 +655,9 @@ public class DashboardMigrator {
 		Map<String, Mapping> maps = new HashMap<>();
 		maps.put("project", projectMapping);
 		maps.put("field", fieldMapping);
+		int noError = 0;
 		for (Integer id : filters) {
+			boolean hasError = false;
 			try {
 				DataCenterFilter filter = getFilter(dataCenterClient, conf.getSourceRESTBaseURL(), id);
 				//System.out.println("Processing filter " + filter.getName() + "...");
@@ -599,6 +665,7 @@ public class DashboardMigrator {
 				if (userMapping.getMapped().containsKey(filter.getOwner().getName())) {
 					filter.getOwner().setAccountId(userMapping.getMapped().get(filter.getOwner().getName()));
 				} else {
+					hasError = true;
 					LOGGER.error("Filter [" + filter.getName() + "] owner [" + filter.getOwner().getName() + "] cannot be mapped");
 				}				
 				// Translate id via cloud site
@@ -608,18 +675,21 @@ public class DashboardMigrator {
 						if (userMapping.getMapped().containsKey(permission.getUser().getId())) {
 							permission.getUser().setAccountId(userMapping.getMapped().get(permission.getUser().getName()));
 						} else {
+							hasError = true;
 							LOGGER.error("Filter [" + filter.getName() + "] user [" + permission.getUser().getName() + "] (" + permission.getUser().getDisplayName() + ") cannot be mapped");
 						}
 					} else if (type == PermissionType.GROUP) {
 						if (groupMapping.getMapped().containsKey(permission.getGroup().getName())) {
 							permission.getGroup().setGroupId(groupMapping.getMapped().get(permission.getGroup().getName()));
 						} else {
+							hasError = true;
 							LOGGER.error("Filter [" + filter.getName() + "] group [" + permission.getGroup().getName() + "] cannot be mapped");
 						}
 					} else if (type == PermissionType.PROJECT) {
 						if (projectMapping.getMapped().containsKey(permission.getProject().getId())) {
 							permission.getProject().setId(projectMapping.getMapped().get(permission.getProject().getId()));
 						} else {
+							hasError = true;
 							LOGGER.error("Filter [" + filter.getName() + "] project [" + permission.getProject().getId() + "] (" + permission.getProject().getName() + ") cannot be mapped");
 						}
 						if (permission.getRole() != null) {
@@ -627,6 +697,7 @@ public class DashboardMigrator {
 							if (roleMapping.getMapped().containsKey(permission.getRole().getId())) {
 								permission.getRole().setId(roleMapping.getMapped().get(permission.getRole().getId()));
 							} else {
+								hasError = true;
 								LOGGER.error("Filter [" + filter.getName() + "] role [" + permission.getRole().getId() + "] (" + permission.getRole().getName() + ") cannot be mapped");
 							}
 						}
@@ -634,7 +705,7 @@ public class DashboardMigrator {
 				}
 				// Translate JQL
 				String jql = filter.getJql();
-				LOGGER.info("Filter [" + filter.getName() + "] JQL: [" + jql + "]");
+				//LOGGER.info("Filter [" + filter.getName() + "] JQL: [" + jql + "]");
 				JqlLexer lexer = new JqlLexer((CharStream) new ANTLRStringStream(jql));
 				CommonTokenStream cts = new CommonTokenStream(lexer);
 				JqlParser parser = new JqlParser(cts);
@@ -644,26 +715,25 @@ public class DashboardMigrator {
 				if (qr.order != null) {
 					List<SearchSort> sortList = new ArrayList<>();
 					for (SearchSort ss : qr.order.getSearchSorts()) {
-						if (fieldMapping.getMapped().containsKey(ss.getField())) {
-							String newColumn = fieldMapping.getMapped().get(ss.getField());
-							SearchSort newSS = new SearchSort(newColumn, ss.getProperty(), ss.getSortOrder());
-							sortList.add(newSS);
-							LOGGER.warn("Mapped sort column for filter [" + filter.getName() + "] column [" + ss.getField() + "] => [" + newColumn + "]");
-						} else {
-							sortList.add(ss);
-							LOGGER.warn("Unable to map sort column for filter [" + filter.getName() + "] column [" + ss.getField() + "]");
-						}
+						String newColumn = mapCustomFieldName(fieldMapping.getMapped(), ss.getField());
+						SearchSort newSS = new SearchSort(newColumn, ss.getProperty(), ss.getSortOrder());
+						sortList.add(newSS);
+						//LOGGER.warn("Mapped sort column for filter [" + filter.getName() + "] column [" + ss.getField() + "] => [" + newColumn + "]");
 					}
 					orderClone = new OrderByImpl(sortList);
 				}
-				LOGGER.info("Updated JQL for filter [" + filter.getName() +  "]: [" + clone + ((orderClone != null)? " " + orderClone : "") + "]");
+				//LOGGER.info("Updated JQL for filter [" + filter.getName() +  "]: [" + clone + ((orderClone != null)? " " + orderClone : "") + "]");
 				filter.setJql(clone + ((orderClone != null)? " " + orderClone : ""));
 				filterList.add(filter);
+				if (!hasError) {
+					noError++;
+				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 		saveFile(DataFile.FILTER_DATA, filterList);
+		printCount("Filter translated without errors: ", noError, filterList.size());
 		LOGGER.info("Filter dump completed");
 	}
 	
@@ -695,7 +765,7 @@ public class DashboardMigrator {
 			}
 		}
 		saveFile(DataFile.FILTER_MIGRATED, migratedList);
-		LOGGER.info("Filters migrated: " + migratedCount + "/" + filters.size());
+		printCount("Filters migrated: ", migratedCount, filters.size());
 		LOGGER.info("Create filter completed");
 	}
 	
@@ -711,7 +781,7 @@ public class DashboardMigrator {
 				LOGGER.error("Failed to delete filter [" + filter.getKey() + "] (" + filter.getValue() + "): " + resp.readEntity(String.class));
 			}
 		}
-		LOGGER.info("Filters deleted: " + deletedCount + "/" + filters.getMapped().size());
+		printCount("Filters deleted: ", deletedCount, filters.getMapped().size());
 		LOGGER.info("Delete filter completed");
 	}
 	
@@ -725,10 +795,14 @@ public class DashboardMigrator {
 		Mapping groupMapping = readFile(DataFile.GROUP_MAP, Mapping.class);
 		Mapping fieldMapping = readFile(DataFile.FIELD_MAP, Mapping.class);
 		Mapping filterMapping = readFile(DataFile.FILTER_MIGRATED, Mapping.class);
+		int errorCount = 0;
 		for (DataCenterPortalPage dashboard : dashboards) {
 			// Translate owner
 			if (userMapping.getMapped().containsKey(dashboard.getUsername())) {
 				dashboard.setAccountId(userMapping.getMapped().get(dashboard.getUsername()));
+			} else {
+				errorCount++;
+				LOGGER.warn("Unable to map owner for dashboard [" + dashboard.getPageName() + "] owner [" + dashboard.getUsername() + "]");
 			}
 			// Sort gadgets, then loop over to ensure no gaps or collisions
 			dashboard.getPortlets().sort(new DataCenterGadgetComparator());
@@ -758,6 +832,7 @@ public class DashboardMigrator {
 			}
 		}
 		saveFile(DataFile.DASHBOARD_DATA, dashboards);
+		printCount("Dashboard translated without errors: ", dashboards.size() - errorCount, dashboards.size());
 		LOGGER.info("Dump dashboard completed");
 		LOGGER.info("Please manually translate references");
 	}
@@ -822,7 +897,7 @@ public class DashboardMigrator {
 			}
 		}
 		saveFile(DataFile.DASHBOARD_MIGRATED, migratedList);
-		LOGGER.info("Dashboards migrated: " + migratedCount + "/" + dashboards.size());
+		printCount("Dashboards migrated: ", migratedCount, dashboards.size());
 		LOGGER.info("Create dashboard completed");
 	}
 	
@@ -838,7 +913,7 @@ public class DashboardMigrator {
 				LOGGER.error("Failed to delete dashboard [" + dashboard.getKey() + "] (" + dashboard.getValue() + "): " + resp.readEntity(String.class));
 			}
 		}
-		LOGGER.info("Dashboards deleted: " + deletedCount + "/" + dashboards.getMapped().size());
+		printCount("Dashboards deleted: ", deletedCount, dashboards.getMapped().size());
 		LOGGER.info("Delete dashboard completed");
 	}
 	
@@ -849,6 +924,7 @@ public class DashboardMigrator {
 		@Override
 		public String toString() {
 			String s = super.toString();
+			// Remove curly brackets added by TerminalClauseImpl
 			if (s.startsWith("{") && s.endsWith("}")) {
 				return s.substring(1, s.length() - 1);
 			}
@@ -865,14 +941,14 @@ public class DashboardMigrator {
 			} else {
 				key = src.getStringValue();
 			}
-			if (map.containsKey(key)) {
+			if (map != null && map.containsKey(key)) {
 				if (src.getLongValue() != null) {
 					Long newValue = Long.valueOf(map.get(Long.toString(src.getLongValue())));
-					LOGGER.info("Mapped value for filter [" + filterName + "] type [" + propertyName + "] value [" + src.getLongValue() + "] => [" + newValue + "]");
+					//LOGGER.info("Mapped value for filter [" + filterName + "] type [" + propertyName + "] value [" + src.getLongValue() + "] => [" + newValue + "]");
 					result = new SingleValueOperand(newValue);
 				} else {
 					String newValue = map.get(src.getStringValue());
-					LOGGER.info("Mapped value forfilter [" + filterName + "] type [" + propertyName + "] value [" + src.getStringValue() + "] => [" + newValue + "]");
+					//LOGGER.info("Mapped value forfilter [" + filterName + "] type [" + propertyName + "] value [" + src.getStringValue() + "] => [" + newValue + "]");
 					result = new SingleValueOperand(newValue);
 				}
 			} else {
@@ -888,17 +964,37 @@ public class DashboardMigrator {
 		return result;
 	}
 	
+	private static final Pattern CUSTOM_FIELD_CF = Pattern.compile("(cf\\[)([0-9]+)(\\])");
+	private static final String CUSTOM_FIELD = "customfield_";
+	private static String mapCustomFieldName(Map<String, String> map, String data) {
+		// If data is customfield_#
+		if (map.containsKey(data)) {
+			return map.get(data);
+		} 
+		// If data is cf[#]
+		Matcher m = CUSTOM_FIELD_CF.matcher(data);
+		if (m.matches()) {
+			if (map.containsKey(CUSTOM_FIELD + m.group(2))) {
+				String s = map.get(CUSTOM_FIELD + m.group(2));
+				s = s.substring(CUSTOM_FIELD.length());
+				return "cf[" + s + "]";
+			}
+		}
+		if (data.contains(" ")) {
+			return "\"" + data + "\"";
+		} else {
+			return data;
+		}
+	}
+	
 	private static Clause cloneClause(String filterName, Map<String, Mapping> maps, Clause c) {
 		Clause clone = null;
 		Map<String, String> propertyMap = maps.get("field").getMapped();
 		List<Clause> clonedChildren = new ArrayList<>();
 		if (c != null) {
+			//LOGGER.debug("Clause: " + c + ", " + c.getClass());
 			// Check name
-			String propertyName = c.getName();
-			if (propertyMap.containsKey(c.getName())) {
-				propertyName = propertyMap.get(c.getName());
-				LOGGER.info("Mapped property for filter [" + filterName + "] property [" + c.getName() + "] => [" + propertyName + "]");
-			}
+			String propertyName = mapCustomFieldName(propertyMap, c.getName());
 			for (Clause sc : c.getClauses()) {
 				Clause clonedChild = cloneClause(filterName, maps, sc);
 				clonedChildren.add(clonedChild);
@@ -911,8 +1007,11 @@ public class DashboardMigrator {
 				clone = new NotClause(clonedChildren.get(0));
 			} else if (c instanceof TerminalClause) {
 				TerminalClause tc = (TerminalClause) c;
-				if (maps.containsKey(tc.getName())) {
-					Map<String, String> targetMap = maps.get(tc.getName()).getMapped();
+				//if (maps.containsKey(tc.getName())) {
+					Map<String, String> targetMap = null;
+					if (maps.containsKey(tc.getName())) {
+						targetMap = maps.get(tc.getName()).getMapped();
+					}
 					// Modify values
 					Operand o = tc.getOperand();
 					Operand clonedO = null;
@@ -935,19 +1034,25 @@ public class DashboardMigrator {
 						clonedO = new MultiValueOperand(list);
 					} else if (o instanceof FunctionOperand) {
 						// TODO membersOf to map group
-						clonedO = o;
+						FunctionOperand fo = (FunctionOperand) o;
+						List<String> args = new ArrayList<>();
+						for (String s : fo.getArgs()) {
+							args.add("\"" + s + "\"");
+						}
+						//LOGGER.debug("args: [" + GSON.toJson(args) + "]");
+						clonedO = new FunctionOperand(fo.getName(), args);
 					} else if (o instanceof EmptyOperand) {
 						clonedO = o;
 					} else {
-						LOGGER.error("Unrecognized Operand class for filter [" + filterName + "] class [" + o.getClass() + "], reusing reference");
+						LOGGER.warn("Unrecognized Operand class for filter [" + filterName + "] class [" + o.getClass() + "], reusing reference");
 						clonedO = o;
 					}
 					// Use cloned operand
 					clone = new MyTerminalClause(propertyName, tc.getOperator(), clonedO);
-				} else {
-					// Use original operand
-					clone = new MyTerminalClause(propertyName, tc.getOperator(), tc.getOperand());
-				}				
+//				} else {
+//					// Use original operand
+//					clone = new MyTerminalClause(propertyName, tc.getOperator(), tc.getOperand());
+//				}				
 			} else if (c instanceof WasClause) {
 				WasClause wc = (WasClause) c;
 				clone = new WasClauseImpl(propertyName, wc.getOperator(), wc.getOperand(), wc.getPredicate());
@@ -955,20 +1060,21 @@ public class DashboardMigrator {
 				ChangedClause cc = (ChangedClause) c;
 				clone = new ChangedClauseImpl(propertyName, cc.getOperator(), cc.getPredicate());
 			} else {
-				LOGGER.error("Unrecognized Clause class for filter [" + filterName + "] class [" + c.getClass() + "], reusing reference");
+				LOGGER.warn("Unrecognized Clause class for filter [" + filterName + "] class [" + c.getClass() + "], reusing reference");
 				clone = c;
 			}
 		} else {
-			LOGGER.info("Clause: null");
+			LOGGER.warn("Clause: null");
 		}
 		return clone;
 	}
 
 	public static void main(String[] args) {
+		AnsiConsole.systemInstall();
 		try {
 			// Parse config
 			Config conf = parseConfig(args);
-			if (conf == null) {
+			if (conf == null || conf.getOperation() == null) {
 				printHelp();
 				return;
 			}
@@ -1006,6 +1112,9 @@ public class DashboardMigrator {
 				case DELETE_FILTER: 
 					deleteFilter(filterMapper, cloudClient, dataCenterClient, conf);
 					break;
+				case LIST_FILTER: 
+					listFilter(filterMapper, cloudClient, dataCenterClient, conf);
+					break;
 				case DUMP_DASHBOARD:
 					dumpDashboard(filterMapper, cloudClient, dataCenterClient, conf);
 					break;
@@ -1015,10 +1124,14 @@ public class DashboardMigrator {
 				case DELETE_DASHBOARD:
 					deleteDashboard(filterMapper, cloudClient, dataCenterClient, conf);
 					break;
+				case LIST_DASHBOARD:
+					listDashboard(filterMapper, cloudClient, dataCenterClient, conf);
+					break;
 				}
 			}
 		} catch (Exception ex) {
-			LOGGER.error("Exception: " + ex.getMessage(), ex);
+			LOGGER.fatal("Exception: " + ex.getMessage(), ex);
 		}
+		AnsiConsole.systemUninstall();
 	}
 }

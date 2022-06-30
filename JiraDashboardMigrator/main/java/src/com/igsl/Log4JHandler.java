@@ -16,7 +16,7 @@ public class Log4JHandler extends Handler {
 	@Override
 	public void publish(LogRecord record) {
 		if (record != null) {
-			log4j.info(record.getMessage());
+			log4j.debug(record.getMessage());
 		}
 	}
 

@@ -23,9 +23,11 @@ public enum DataFile {
 	
 	FILTER_DATA("Filter", "Data"),
 	FILTER_MIGRATED("Filter", "Migrated"),
+	FILTER_LIST("Filter", "Cloud"),
 	
 	DASHBOARD_DATA("Dashboard", "Data"),
-	DASHBOARD_MIGRATED("Dashboard", "Migrated");
+	DASHBOARD_MIGRATED("Dashboard", "Migrated"),
+	DASHBOARD_LIST("Dashboard", "Cloud");
 	
 	private static final String EXTENSION = ".json";
 	private String value;

@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import com.igsl.model.mapping.Mapping;
 import com.igsl.model.mapping.MappingType;
 
 public class CloudGadgetConfigurationMapper {
+	
+	private static final Logger LOGGER = Logger.getLogger(CloudGadgetConfigurationMapper.class);
 	
 	public static class ConfigData {
 		String pattern;
@@ -183,7 +187,7 @@ public class CloudGadgetConfigurationMapper {
 									String s = map.getMapped().get(oldValue);
 									m.appendReplacement(newValue, data.getReplacePrefix() + s + data.getReplaceSuffix());
 								} else {
-									System.out.println("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
+									LOGGER.warn("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
 								}
 							}
 							m.appendTail(newValue);
@@ -201,7 +205,7 @@ public class CloudGadgetConfigurationMapper {
 									m.appendTail(newValue);
 									item.setUserPrefValue(newValue.toString());
 								} else {
-									System.out.println("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
+									LOGGER.warn("Mapping not found for gadget " + gadget.getId() + " configuration [" + item.getUserPrefKey() + "] value [" + item.getUserPrefValue() + "]");
 								}
 							}
 						}
