@@ -1,4 +1,4 @@
-package com.igsl;
+package com.igsl.logging;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

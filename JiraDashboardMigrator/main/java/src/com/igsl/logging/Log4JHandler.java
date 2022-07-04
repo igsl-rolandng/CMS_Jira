@@ -1,4 +1,4 @@
-package com.igsl;
+package com.igsl.logging;
 
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;

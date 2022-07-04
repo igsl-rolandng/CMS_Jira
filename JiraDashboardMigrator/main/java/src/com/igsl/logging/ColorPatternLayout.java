@@ -1,4 +1,4 @@
-package com.igsl;
+package com.igsl.logging;
 
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.Priority;
