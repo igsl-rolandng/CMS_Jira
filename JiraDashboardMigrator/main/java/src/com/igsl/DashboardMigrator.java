@@ -872,7 +872,7 @@ public class DashboardMigrator {
 								new URI(conf.getTargetRESTBaseURL())
 									.resolve("rest/api/latest/dashboard/").resolve(createdDashboard.getId() + "/")
 									.resolve("items/").resolve(createdGadget.getId() + "/")
-									.resolve("properties/config"),
+									.resolve("properties/itemkey"),
 								HttpMethod.PUT,
 								null,
 								null,
